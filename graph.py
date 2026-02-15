@@ -86,6 +86,26 @@ def BFS2(G, node1, node2):
 # print(BFS2(test_graph, 0, 7)) #should return shortest path from 0 to 7
 # print(BFS2(test_graph, 0, 8)) #should return empty list - path does not exist
 
+#BFS that returns predecessor dictionary to all nodes from node1
+def BFS3(G, node1):
+    Q = deque([node1])
+    marked = {node1 : True}
+    pred = {}
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                pred[node] = current_node
+    
+    return pred
+
+# print(BFS3(test_graph, 0))
+
 #Depth First Search
 def DFS(G, node1, node2):
     S = [node1]
@@ -131,6 +151,61 @@ def DFS2(G, node1, node2):
 
 # print(DFS2(test_graph, 0, 7)) #should return shortest path from 0 to 7
 # print(DFS2(test_graph, 0, 8)) #should return empty list - path does not exist
+
+#DFS that returns predecessor dictionary to all nodes from node1
+def DFS3(G, node1):
+    S = [node1]
+    marked = {}
+    pred = {}
+    for node in G.adj:
+        marked[node] = False
+    marked[node1] = True
+    while len(S) != 0:
+        current_node = S.pop()
+        for node in G.adj[current_node]:
+            if not marked[node]:
+                # change pred of node only the first time you see it
+                pred[node] = current_node
+                S.append(node)
+                marked[node] = True       
+    return pred
+
+# print(DFS3(test_graph, 3))
+
+# TODO: Test this function
+def has_cycle(G):
+    Q = deque([])
+    marked = {}
+    pred = {}
+    for node in G.adj:
+        marked[node] = False
+    
+    # Ensures we search through all nodes even if components are disconnected from each other
+    for node in G.adj:
+        if not marked[node]:
+            Q.append(node)
+            pred[node] = None
+            marked[node] = True
+            while len(Q) != 0:
+                current_node = Q.popleft()
+                for node in G.adj[current_node]:
+                    if not marked[node]:
+                        Q.append(node)
+                        marked[node] = True
+                        pred[node] = current_node
+                    elif node != pred[current_node]:
+                        return True
+    
+    return False
+
+# TODO: Finish implementation
+def is_connected(G):
+    return
+
+# TODO: Finish implementation
+# Returns a graph with i nodes and j edges, and should NOT create a graph with "multiples" of the same edge
+def create_random_graph(i, j):
+    return
 
 
 #Use the methods below to determine minimum vertex covers
