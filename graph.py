@@ -25,6 +25,18 @@ class Graph:
     def number_of_nodes():
         return len()
 
+#Sample Graph where only node=8 is unreachable (was NOT included in original graph.py) - uncomment to use it using CTRL+?
+# test_graph = Graph(9)
+# test_graph.add_edge(0,1)
+# test_graph.add_edge(0,2)
+# test_graph.add_edge(1,2)
+# test_graph.add_edge(1,3)
+# test_graph.add_edge(2,3)
+# test_graph.add_edge(2,4)
+# test_graph.add_edge(3,5)
+# test_graph.add_edge(3,6)
+# test_graph.add_edge(4,7)
+# test_graph.add_edge(6,7)
 
 #Breadth First Search
 def BFS(G, node1, node2):
@@ -43,6 +55,36 @@ def BFS(G, node1, node2):
                 marked[node] = True
     return False
 
+#BFS that returns path from node1 to node2
+def BFS2(G, node1, node2):
+    Q = deque([node1])
+    marked = {node1 : True}
+    pred = {node1: None}
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            if node == node2:
+                # build the result path from predecessor array, use current_node in reverse now
+                pred[node] = current_node
+                current_node = node
+                path = [node2]
+                while pred[current_node] != None:
+                    path.append(pred[current_node])
+                    current_node = pred[current_node]
+                return path[::-1]
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                pred[node] = current_node
+    
+    # if we got here then node2 was not found
+    return []
+
+# print(BFS2(test_graph, 0, 7)) #should return shortest path from 0 to 7
+# print(BFS2(test_graph, 0, 8)) #should return empty list - path does not exist
 
 #Depth First Search
 def DFS(G, node1, node2):
@@ -59,6 +101,37 @@ def DFS(G, node1, node2):
                     return True
                 S.append(node)
     return False
+
+#DFS that returns path from node1 to node2
+def DFS2(G, node1, node2):
+    S = [node1]
+    marked = {}
+    pred = {node1: None}
+    for node in G.adj:
+        marked[node] = False
+    marked[node1] = True
+    while len(S) != 0:
+        current_node = S.pop()
+        for node in G.adj[current_node]:
+            if not marked[node]:
+                # change pred of node only the first time you see it
+                pred[node] = current_node
+                S.append(node)
+                marked[node] = True
+            if node == node2:
+                # build the result path from predecessor array, use current_node in reverse now
+                current_node = node2
+                path = [node2]
+                while pred[current_node] != None:
+                    path.append(pred[current_node])
+                    current_node = pred[current_node]
+                return path[::-1]
+                
+    return []
+
+# print(DFS2(test_graph, 0, 7)) #should return shortest path from 0 to 7
+# print(DFS2(test_graph, 0, 8)) #should return empty list - path does not exist
+
 
 #Use the methods below to determine minimum vertex covers
 
