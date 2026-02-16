@@ -1,4 +1,5 @@
 from collections import deque
+import random
 
 #Undirected graph using an adjacency list
 class Graph:
@@ -83,9 +84,6 @@ def BFS2(G, node1, node2):
     # if we got here then node2 was not found
     return []
 
-# print(BFS2(test_graph, 0, 7)) #should return shortest path from 0 to 7
-# print(BFS2(test_graph, 0, 8)) #should return empty list - path does not exist
-
 #BFS that returns predecessor dictionary to all nodes from node1
 def BFS3(G, node1):
     Q = deque([node1])
@@ -103,8 +101,6 @@ def BFS3(G, node1):
                 pred[node] = current_node
     
     return pred
-
-# print(BFS3(test_graph, 0))
 
 #Depth First Search
 def DFS(G, node1, node2):
@@ -149,9 +145,6 @@ def DFS2(G, node1, node2):
                 
     return []
 
-# print(DFS2(test_graph, 0, 7)) #should return shortest path from 0 to 7
-# print(DFS2(test_graph, 0, 8)) #should return empty list - path does not exist
-
 #DFS that returns predecessor dictionary to all nodes from node1
 def DFS3(G, node1):
     S = [node1]
@@ -170,9 +163,6 @@ def DFS3(G, node1):
                 marked[node] = True       
     return pred
 
-# print(DFS3(test_graph, 3))
-
-# TODO: Test this function
 def has_cycle(G):
     Q = deque([])
     marked = {}
@@ -198,14 +188,46 @@ def has_cycle(G):
     
     return False
 
-# TODO: Finish implementation
+# Uses a BFS with a count to see if every node is reachable from start
 def is_connected(G):
-    return
+    if len(G.adj) == 0:
+        return True
+    count = 1
+    node1 = 0
+    Q = deque([node1])
+    marked = {node1 : True}
+    for node in G.adj:
+        if node != node1:
+            marked[node] = False
+    while len(Q) != 0:
+        current_node = Q.popleft()
+        for node in G.adj[current_node]:
+            if not marked[node]:
+                Q.append(node)
+                marked[node] = True
+                count += 1
+    return count == len(G.adj)
 
-# TODO: Finish implementation
 # Returns a graph with i nodes and j edges, and should NOT create a graph with "multiples" of the same edge
 def create_random_graph(i, j):
-    return
+    G = Graph(i)
+    edges_added = 0
+    max_edges = (i * (i - 1)) // 2  # Maximum possible edges in an undirected graph
+    
+    # If you want more edges than possible, then we just make the maximum
+    if j > max_edges:
+        j = max_edges
+    
+    while edges_added < j:
+        node1 = random.randint(0, i - 1)
+        node2 = random.randint(0, i - 1)
+        
+        # Avoid self-loops and duplicate edges
+        if node1 != node2 and not G.are_connected(node1, node2):
+            G.add_edge(node1, node2)
+            edges_added += 1
+    
+    return G
 
 
 #Use the methods below to determine minimum vertex covers
