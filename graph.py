@@ -208,11 +208,13 @@ def is_connected(G):
                 count += 1
     return count == len(G.adj)
 
+# NOTE: we do not have self-loop edges in this graph as a design choice
 # Returns a graph with i nodes and j edges, and should NOT create a graph with "multiples" of the same edge
 def create_random_graph(i, j):
     G = Graph(i)
     edges_added = 0
-    max_edges = (i * (i - 1)) // 2  # Maximum possible edges in an undirected graph
+    # Maximum possible edges in an undirected graph, each edge gets counted twice so int-divide by 2 for unique edges only
+    max_edges = (i * (i - 1)) // 2
     
     # If you want more edges than possible, then we just make the maximum
     if j > max_edges:
