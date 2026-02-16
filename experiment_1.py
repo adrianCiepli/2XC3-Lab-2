@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def run_experiment(num_nodes):
     num_edges = []
-    for i in range(0, num_nodes * 3 // 2, num_nodes // 10):
+    for i in range(0, num_nodes * 3 // 2, num_nodes // 20):
         num_edges.append(i)
     m = 100 # number of graphs for each number of edges
 
