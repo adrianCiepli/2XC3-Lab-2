@@ -213,7 +213,8 @@ def is_connected(G):
 def create_random_graph(i, j):
     G = Graph(i)
     edges_added = 0
-    # Maximum possible edges in an undirected graph, each edge gets counted twice so int-divide by 2 for unique edges only
+    # Maximum possible edges with no self-loop edge: i*(i-1)
+    # each undirected edge gets counted twice for both directions so int-divide by 2 for unique edges only
     max_edges = (i * (i - 1)) // 2
     
     # If you want more edges than possible, then we just make the maximum
