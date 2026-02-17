@@ -231,7 +231,6 @@ def create_random_graph(i, j):
     
     return G
 
-
 #Use the methods below to determine minimum vertex covers
 
 def add_to_each(sets, element):
