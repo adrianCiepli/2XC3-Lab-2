@@ -23,8 +23,10 @@ class Graph:
             self.adj[node1].append(node2)
             self.adj[node2].append(node1)
 
-    def number_of_nodes():
-        return len()
+    # def number_of_nodes(): (this was changed to the one below) [changed]
+    #     return len()
+    def number_of_nodes(self):
+        return len(self.adj)
 
 #Sample Graph where only node=8 is unreachable (was NOT included in original graph.py) - uncomment to use it using CTRL ?
 # test_graph = Graph(9)
@@ -253,7 +255,8 @@ def is_vertex_cover(G, C):
     return True
 
 def MVC(G):
-    nodes = [i for i in range(G.get_size())]
+    # nodes = [i for i in range(G.get_size())] [changed]
+    nodes = [i for i in range(G.number_of_nodes())]
     subsets = power_set(nodes)
     min_cover = nodes
     for subset in subsets:
@@ -263,3 +266,89 @@ def MVC(G):
     return min_cover
 
 
+# Part 2
+
+# Helper
+def copy_graph(G):
+    n = G.number_of_nodes()
+    H = Graph(n)
+    for node in G.adj:
+        for neighbor in G.adj[node]:
+            if node < neighbor:  # avoid adding each edge twice
+                H.add_edge(node, neighbor)
+    return H
+
+# Helper
+def get_edges(G):
+    edges = []
+    for node in G.adj:
+        for neighbor in G.adj[node]:
+            if node < neighbor:
+                edges.append((node, neighbor))
+    return edges
+
+def approx1(G):
+    H = copy_graph(G)
+    C = set()
+    while not is_vertex_cover(H, C):
+        max_degree = -1
+        max_node = -1
+        for node in H.adj:
+            degree = len(H.adj[node])
+            if degree > max_degree:
+                max_degree = degree
+                max_node = node
+        C.add(max_node)
+        for neighbor in list(H.adj[max_node]):
+            H.adj[neighbor].remove(max_node)
+        H.adj[max_node] = []
+    return C
+
+
+def approx2(G):
+    C = set()
+    nodes = list(G.adj.keys())
+    random.shuffle(nodes)
+    for v in nodes:
+        C.add(v)
+        if is_vertex_cover(G, C):
+            return C
+    return C
+
+
+def approx3(G):
+    H = copy_graph(G)
+    C = set()
+    while not is_vertex_cover(H, C):
+        edges = get_edges(H)
+        if len(edges) == 0:
+            break
+        u, v = random.choice(edges)
+        C.add(u)
+        C.add(v)
+        for neighbor in list(H.adj[u]):
+            H.adj[neighbor].remove(u)
+        H.adj[u] = []
+        for neighbor in list(H.adj[v]):
+            H.adj[neighbor].remove(v)
+        H.adj[v] = []
+    return C
+
+# Returns True if S is an independent set in G
+def is_independent_set(G, S):
+    for u in S:
+        for v in S:
+            if u != v and G.are_connected(u, v):
+                return False
+    return True
+
+# Brute force Maximum Independent Set
+def MIS(G):
+    nodes = [i for i in range(G.number_of_nodes())]
+    subsets = power_set(nodes)
+    max_set = []
+    for subset in subsets:
+        if is_independent_set(G, subset):
+            if len(subset) > len(max_set):
+                max_set = subset
+    return max_set
