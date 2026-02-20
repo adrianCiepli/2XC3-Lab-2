@@ -54,36 +54,46 @@ plt.tight_layout()
 plt.savefig('experiment_3a.png')
 plt.show()
 
-plt.figure(figsize=(10, 6))
-for num_nodes in [6, 8, 10]:
-    max_edges = (num_nodes * (num_nodes - 1)) // 2
-    edge_values = list(range(1, max_edges + 1, max(1, max_edges // 10)))
-    print(f"Running Experiment B: {num_nodes} nodes...")
-    a1_ratios, a2_ratios, a3_ratios = run_approx_experiment(num_nodes, edge_values, 500)
-    plt.plot(edge_values, a1_ratios, marker='o', label=f'approx1 (n={num_nodes})')
+# Experiment B: All 3 approximations on a graph with 6 nodes
+num_nodes_b = 6
+max_edges_b = (num_nodes_b * (num_nodes_b - 1)) // 2
+edge_values_b = list(range(1, max_edges_b + 1, max(1, max_edges_b // 10)))
+m_b = 500
 
+print(f"Running Experiment B: {num_nodes_b} nodes, {m_b} graphs per edge count...")
+a1_ratios_b, a2_ratios_b, a3_ratios_b = run_approx_experiment(num_nodes_b, edge_values_b, m_b)
+
+plt.figure(figsize=(10, 6))
+plt.plot(edge_values_b, a1_ratios_b, marker='o', label='approx1 (greedy highest degree)')
+plt.plot(edge_values_b, a2_ratios_b, marker='s', label='approx2 (random vertex)')
+plt.plot(edge_values_b, a3_ratios_b, marker='^', label='approx3 (random edge)')
 plt.axhline(y=1, color='r', linestyle='--', label='Optimal (MVC)')
 plt.xlabel('Number of Edges')
 plt.ylabel('Approximation Ratio (approx size / MVC size)')
-plt.title('approx1 Performance Across Different Node Counts')
+plt.title(f'Approximation Performance vs Number of Edges (n = {num_nodes_b}, m = {m_b})')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.savefig('experiment_3b.png')
 plt.show()
 
-plt.figure(figsize=(10, 6))
-for num_nodes in [6, 8, 10]:
-    max_edges = (num_nodes * (num_nodes - 1)) // 2
-    edge_values = list(range(1, max_edges + 1, max(1, max_edges // 10)))
-    print(f"Running Experiment C: {num_nodes} nodes...")
-    a1_ratios, a2_ratios, a3_ratios = run_approx_experiment(num_nodes, edge_values, 500)
-    plt.plot(edge_values, a2_ratios, marker='s', label=f'approx2 (n={num_nodes})')
+# Experiment C: All 3 approximations on a graph with 10 nodes
+num_nodes_c = 10
+max_edges_c = (num_nodes_c * (num_nodes_c - 1)) // 2
+edge_values_c = list(range(1, max_edges_c + 1, max(1, max_edges_c // 10)))
+m_c = 500
 
+print(f"Running Experiment C: {num_nodes_c} nodes, {m_c} graphs per edge count...")
+a1_ratios_c, a2_ratios_c, a3_ratios_c = run_approx_experiment(num_nodes_c, edge_values_c, m_c)
+
+plt.figure(figsize=(10, 6))
+plt.plot(edge_values_c, a1_ratios_c, marker='o', label='approx1 (greedy highest degree)')
+plt.plot(edge_values_c, a2_ratios_c, marker='s', label='approx2 (random vertex)')
+plt.plot(edge_values_c, a3_ratios_c, marker='^', label='approx3 (random edge)')
 plt.axhline(y=1, color='r', linestyle='--', label='Optimal (MVC)')
 plt.xlabel('Number of Edges')
 plt.ylabel('Approximation Ratio (approx size / MVC size)')
-plt.title('approx2 Performance Across Different Node Counts')
+plt.title(f'Approximation Performance vs Number of Edges (n = {num_nodes_c}, m = {m_c})')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
