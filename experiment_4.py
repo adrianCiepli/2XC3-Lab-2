@@ -16,8 +16,11 @@ def run_experiment(num_nodes):
         mvc_total = 0
         for _ in range(m):
             G = create_random_graph(num_nodes, num_edges)
-            mis_total += len(MIS(G))
-            mvc_total += len(MVC(G))
+            mis_size = len(MIS(G))
+            mvc_size = len(MVC(G))
+            mis_total += mis_size
+            mvc_total += mvc_size
+            assert mis_size + mvc_size == num_nodes  # Verifies |MIS| + |MVC| = n
         mis_avg_sizes.append(mis_total / m)
         mvc_avg_sizes.append(mvc_total / m)
 

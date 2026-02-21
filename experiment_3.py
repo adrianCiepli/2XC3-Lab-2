@@ -5,7 +5,7 @@ from graph import *
 import matplotlib.pyplot as plt
 
 def run_experiment(num_nodes, m):
-    edge_values = list(range(1, 31, 5))
+    edge_values = [1, 5, 10, 15, 20, 25, 30]
     
     approx1_ratios = []
     approx2_ratios = []
@@ -84,11 +84,9 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-# Graph 3: Worst-case approximation ratio
-# approx1 is deterministic so we test it on ALL graphs of n=5 (2^10 = 1024 possible graphs)
-# approx2/3 are non-deterministic so we use random sampling on n=8
 # Graph 3: Worst-case approximation ratio vs number of edges (n = 8)
-edge_values = list(range(1, 31, 5))
+# Uses random sampling (1000 graphs per edge count) to estimate worst-case
+edge_values = [1, 5, 10, 15, 20, 25, 30]
 
 a1_worst = []
 a2_worst = []
